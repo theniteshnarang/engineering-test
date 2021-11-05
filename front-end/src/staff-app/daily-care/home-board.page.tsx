@@ -1,39 +1,58 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
-import Button from "@material-ui/core/ButtonBase"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Spacing, BorderRadius, FontWeight } from "shared/styles/styles"
-import { Colors } from "shared/styles/colors"
+import { Spacing } from "shared/styles/styles"
 import { CenteredContainer } from "shared/components/centered-container/centered-container.component"
 import { Person } from "shared/models/person"
 import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
+import { storeStudents } from "staff-app/context/actions/staff-actions";
+import { useStaff } from "staff-app/context/staff-provider"
+import { toggleRollMode as changeRollMode, toggleByName, toggleByAscending} from "staff-app/context/actions/staff-actions"
+import { ToolbarAction, Toolbar, ToolbarValue} from "staff-app/components/toolbar/toolbar.component"
+import { getSearchedStudents, getSortedStudents} from "staff-app/utils"
 
 export const HomeBoardPage: React.FC = () => {
-  const [isRollMode, setIsRollMode] = useState(false)
+  const { state,dispatch} = useStaff()
+  const {isRollMode, students, sortBy, searchedBy} = state
   const [getStudents, data, loadState] = useApi<{ students: Person[] }>({ url: "get-homeboard-students" })
-
   useEffect(() => {
     void getStudents()
   }, [getStudents])
 
-  const onToolbarAction = (action: ToolbarAction) => {
+  const onToolbarAction = (action: ToolbarAction, value ?: ToolbarValue) => {
     if (action === "roll") {
-      setIsRollMode(true)
+      dispatch(changeRollMode(true))
+    }else if(action === "sort"){
+      switch(value){
+        case "firstName": return dispatch(toggleByName())
+        case "ascending" : return dispatch(toggleByAscending())
+        default : return ""
+      }
+    }
+  }
+  const onActiveRollAction = (action: ActiveRollAction) => {
+    if (action === "exit") {
+      dispatch(changeRollMode(false))
     }
   }
 
-  const onActiveRollAction = (action: ActiveRollAction) => {
-    if (action === "exit") {
-      setIsRollMode(false)
+  useEffect(()=> {
+    if(data){ // if data is not undefined
+      dispatch(storeStudents(data.students))
     }
-  }
+  },[data, dispatch])
+
+  const sortedStudents = getSortedStudents(students, sortBy)
+  const searchedStudents = getSearchedStudents(sortedStudents, searchedBy)
+  
+
 
   return (
     <>
       <S.PageContainer>
-        <Toolbar onItemClick={onToolbarAction} />
+        <Toolbar onItemClick={onToolbarAction} sort={sortBy}/>
 
         {loadState === "loading" && (
           <CenteredContainer>
@@ -41,11 +60,17 @@ export const HomeBoardPage: React.FC = () => {
           </CenteredContainer>
         )}
 
-        {loadState === "loaded" && data?.students && (
+        {loadState === "loaded" && students.length > 0 && (
           <>
-            {data.students.map((s) => (
-              <StudentListTile key={s.id} isRollMode={isRollMode} student={s} />
-            ))}
+            {
+              searchedStudents.length > 0
+              ?
+              searchedStudents.map((s : Person) => ( <StudentListTile key={s.id} isRollMode={isRollMode} student={s} /> ))
+              :
+              <CenteredContainer>
+                <div>No Student Found</div>
+              </CenteredContainer>
+            }
           </>
         )}
 
@@ -60,20 +85,6 @@ export const HomeBoardPage: React.FC = () => {
   )
 }
 
-type ToolbarAction = "roll" | "sort"
-interface ToolbarProps {
-  onItemClick: (action: ToolbarAction, value?: string) => void
-}
-const Toolbar: React.FC<ToolbarProps> = (props) => {
-  const { onItemClick } = props
-  return (
-    <S.ToolbarContainer>
-      <div onClick={() => onItemClick("sort")}>First Name</div>
-      <div>Search</div>
-      <S.Button onClick={() => onItemClick("roll")}>Start Roll</S.Button>
-    </S.ToolbarContainer>
-  )
-}
 
 const S = {
   PageContainer: styled.div`
@@ -81,22 +92,5 @@ const S = {
     flex-direction: column;
     width: 50%;
     margin: ${Spacing.u4} auto 140px;
-  `,
-  ToolbarContainer: styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    background-color: ${Colors.blue.base};
-    padding: 6px 14px;
-    font-weight: ${FontWeight.strong};
-    border-radius: ${BorderRadius.default};
-  `,
-  Button: styled(Button)`
-    && {
-      padding: ${Spacing.u2};
-      font-weight: ${FontWeight.strong};
-      border-radius: ${BorderRadius.default};
-    }
-  `,
+  `
 }

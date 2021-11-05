@@ -5,6 +5,11 @@ export interface Person {
   photo_url?: string
 }
 
+export interface Sort {
+  firstName : boolean,
+  ascending : boolean
+}
+
 export const PersonHelper = {
   getFullName: (p: Person) => `${p.first_name} ${p.last_name}`,
 }

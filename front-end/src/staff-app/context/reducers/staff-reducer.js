@@ -3,12 +3,12 @@ import { STAFF } from "../action-group"
 
 export const staffReducer = (initState, dispatch) => {
 
-    const { students, sortBy } = initState
+    const { sortBy, students } = initState
     switch (dispatch.type) {
-        case STAFF.STORE_STUDENTS: {
+        case STAFF.UPDATE_STUDENTS_WITH_UNMARK_TYPE: {
             return {
                 ...initState,
-                students: students.concat(dispatch.payload.students)
+                students: dispatch.payload.students.map(student => ({ ...student, type: "unmark" }))
             }
         }
         case STAFF.TOGGLE_ROLL_MODE: {
@@ -39,6 +39,20 @@ export const staffReducer = (initState, dispatch) => {
             return {
                 ...initState,
                 searchedBy: dispatch.payload.value
+            }
+        }
+        case STAFF.UPDATE_STUDENT_WITH_NEW_ROLE: {
+            const { id, type } = dispatch.payload
+            const updatedStudentList = students.map(student => student.id === id ? { ...student, type } : student)
+            return {
+                ...initState,
+                students: updatedStudentList
+            }
+        }
+        case STAFF.ADD_ROLL_STATE: {
+            return {
+                ...initState,
+                rollState: dispatch.payload.roll
             }
         }
         default: {

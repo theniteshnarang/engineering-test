@@ -1,7 +1,7 @@
 import { STAFF } from "../action-group";
 
-const storeStudents = (data) => ({
-    type: STAFF.STORE_STUDENTS,
+const updateStudentsWithUnmarkType = (data) => ({
+    type: STAFF.UPDATE_STUDENTS_WITH_UNMARK_TYPE,
     payload: { students: data }
 })
 
@@ -24,5 +24,16 @@ const searchedByName = (value) => ({
 })
 
 
+const updateStudentWithNewRole = ({ type, id }) => ({
+    type: STAFF.UPDATE_STUDENT_WITH_NEW_ROLE,
+    payload: { type, id }
+})
 
-export { storeStudents, toggleRollMode, toggleByName, toggleByAscending, searchedByName }
+const addRollState = (roll) => ({
+    type: STAFF.ADD_ROLL_STATE,
+    payload: { roll }
+})
+
+
+
+export { updateStudentsWithUnmarkType, toggleRollMode, toggleByName, toggleByAscending, searchedByName, updateStudentWithNewRole, addRollState }

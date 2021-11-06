@@ -3,9 +3,6 @@ import { staffReducer } from "./reducers/staff-reducer";
 
 const StaffContext = createContext()
 
-
-
-
 const initialState = {
     searchedBy: "",
     isRollMode: false,
@@ -13,15 +10,13 @@ const initialState = {
         firstName: true,
         ascending: true
     },
-    students: []
+    students: [],
+    rollState: ""
 }
-
 
 
 export const StaffProvider = ({ children }) => {
     const [state, dispatch] = useReducer(staffReducer, initialState)
-
-
 
     return (
         <StaffContext.Provider value={{ state, dispatch }}>
@@ -29,8 +24,6 @@ export const StaffProvider = ({ children }) => {
         </StaffContext.Provider>
     )
 }
-
-
 
 
 export const useStaff = () => useContext(StaffContext)

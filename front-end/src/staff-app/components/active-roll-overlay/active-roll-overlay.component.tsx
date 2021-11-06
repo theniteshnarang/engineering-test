@@ -13,6 +13,7 @@ interface Props {
 export const ActiveRollOverlay: React.FC<Props> = (props) => {
   const { isActive, onItemClick } = props
 
+  
   return (
     <S.Overlay isActive={isActive}>
       <S.Content>

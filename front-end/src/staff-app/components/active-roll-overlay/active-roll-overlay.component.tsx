@@ -5,6 +5,7 @@ import { BorderRadius, Spacing } from "shared/styles/styles"
 import { RollStateList } from "staff-app/components/roll-state/roll-state-list.component"
 
 export type ActiveRollAction = "filter" | "exit"
+
 interface Props {
   isActive: boolean
   onItemClick: (action: ActiveRollAction, value?: string) => void

@@ -3,19 +3,21 @@ import styled from "styled-components"
 import { FormControlLabel, FormGroup, Switch} from "@material-ui/core"
 import { Search } from '../search/search.component'
 import Button from "@material-ui/core/ButtonBase"
-import {BorderRadius, FontWeight, Spacing} from "shared/styles/styles"
-import { Sort } from 'shared/models/person'
+import { BorderRadius, FontWeight, Spacing } from "shared/styles/styles"
+import { SortType } from 'shared/models/person'
 import { Colors } from "shared/styles/colors"
 export type ToolbarAction = "roll" | "sort"
 export type ToolbarValue = "firstName" | "ascending"
+
 interface ToolbarProps {
   onItemClick: (action: ToolbarAction, value ?: ToolbarValue) => void
-  sort : Sort
+  sortBy : SortType
 }
 
 export const Toolbar: React.FC<ToolbarProps> = (props) => {
-  const { onItemClick, sort} = props
-  const {firstName, ascending} = sort
+  
+  const { onItemClick, sortBy : { firstName, ascending } } = props
+
   return (
     <S.ToolbarContainer>
       <FormGroup>

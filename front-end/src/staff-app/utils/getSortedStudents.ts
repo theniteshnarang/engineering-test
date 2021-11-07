@@ -1,5 +1,5 @@
-import { Person, Sort} from "shared/models/person";
-export const getSortedStudents = (students : Person[], sortBy : Sort) => {
+import { Person, SortType} from "shared/models/person";
+export const getSortedStudents = (students : Person[], sortBy : SortType) => {
     let firstName;
     let secondName;
     const key = sortBy.firstName ? "first_name" : "last_name"

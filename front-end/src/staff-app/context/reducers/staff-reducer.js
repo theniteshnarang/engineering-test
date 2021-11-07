@@ -4,6 +4,7 @@ import { STAFF } from "../action-group"
 export const staffReducer = (initState, dispatch) => {
 
     const { sortBy, students } = initState
+
     switch (dispatch.type) {
         case STAFF.UPDATE_STUDENTS_WITH_UNMARK_TYPE: {
             return {

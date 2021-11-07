@@ -7,7 +7,6 @@ import { searchedByName } from 'staff-app/context/actions/staff-actions'
 export const Search = () => {
     const { dispatch} = useStaff()
 
-
     const handleChange = (e : React.ChangeEvent<HTMLInputElement>) : void => {
         dispatch(searchedByName(e.target.value))
     }

@@ -7,16 +7,17 @@ import { Person } from "shared/models/person"
 import { useApi } from "shared/hooks/use-api"
 import { StudentListTile } from "staff-app/components/student-list-tile/student-list-tile.component"
 import { ActiveRollOverlay, ActiveRollAction } from "staff-app/components/active-roll-overlay/active-roll-overlay.component"
-import { updateStudentsWithUnmarkType } from "staff-app/context/actions/staff-actions";
 import { useStaff } from "staff-app/context/staff-provider"
-import { toggleRollMode as changeRollMode, toggleByName, toggleByAscending} from "staff-app/context/actions/staff-actions"
-import { ToolbarAction, Toolbar, ToolbarValue} from "staff-app/components/toolbar/toolbar.component"
-import { getSearchedStudents, getSortedStudents, getFilteredStudents} from "staff-app/utils"
+import { toggleRollMode as changeRollMode, toggleByName, toggleByAscending, updateStudentsWithUnmarkType } from "staff-app/context/actions/staff-actions"
+import { ToolbarAction, Toolbar, ToolbarValue } from "staff-app/components/toolbar/toolbar.component"
+import { getSearchedStudents, getSortedStudents, getFilteredStudents } from "staff-app/utils"
 
 export const HomeBoardPage: React.FC = () => {
-  const { state,dispatch} = useStaff()
-  const {isRollMode, students, sortBy, searchedBy, rollState} = state
+  const { state, dispatch} = useStaff()
+  const { isRollMode, students, sortBy, searchedBy, rollState } = state
+
   const [getStudents, data, loadState] = useApi<{ students: Person[] }>({ url: "get-homeboard-students" })
+
   useEffect(() => {
     void getStudents()
   }, [getStudents])
@@ -55,7 +56,7 @@ export const HomeBoardPage: React.FC = () => {
   return (
     <>
       <S.PageContainer>
-        <Toolbar onItemClick={onToolbarAction} sort={sortBy}/>
+        <Toolbar onItemClick={onToolbarAction} sortBy={sortBy}/>
 
         {loadState === "loading" && (
           <CenteredContainer>

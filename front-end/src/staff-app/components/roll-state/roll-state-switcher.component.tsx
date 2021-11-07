@@ -1,9 +1,9 @@
 import React from "react"
 import { RolllStateType } from "shared/models/roll"
 import { RollStateIcon } from "staff-app/components/roll-state/roll-state-icon.component"
-import {Person} from "shared/models/person"
-import {useStaff} from '../../context/staff-provider'
-import {updateStudentWithNewRole} from '../../context/actions/staff-actions'
+import { Person } from "shared/models/person"
+import { useStaff } from '../../context/staff-provider'
+import { updateStudentWithNewRole } from '../../context/actions/staff-actions'
 
 interface Props {
   initialState?: RolllStateType
@@ -12,8 +12,7 @@ interface Props {
   student : Person
 }
 export const RollStateSwitcher: React.FC<Props> = ({ size = 40, student}) => {
-  const {state,dispatch} = useStaff()
-  const {students} = state
+  const {state : { students }, dispatch} = useStaff()
 
   const rollState = students.find((s: Person)=> s.type === student.type).type
 

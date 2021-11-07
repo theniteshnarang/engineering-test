@@ -1,12 +1,13 @@
+import { RolllStateType } from "./roll"
 export interface Person {
   id: number
   first_name: string
   last_name: string
   photo_url?: string
-  type ?: string
+  type ?: RolllStateType
 }
 
-export interface Sort {
+export interface SortType {
   firstName : boolean,
   ascending : boolean
 }
